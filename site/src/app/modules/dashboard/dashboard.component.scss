@@ -1,0 +1,36 @@
+.bottom-right {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+}
+.stack {
+    display: inline-grid;
+    * {
+        margin-bottom: 5px;
+    }
+    *:last-child {
+        margin-bottom: inherit
+    }
+}
+
+.container {
+    width: 75%;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 60% 40%;
+    grid-template-rows: auto;
+    grid-template-areas: "chart exchanges"
+    "assets assets";
+    row-gap: 10px;
+    column-gap: 10px;
+}
+
+#chart {
+    grid-area: chart;  
+}
+#exchanges {
+    grid-area: exchanges;  
+}
+#assets {
+    grid-area: assets;  
+}

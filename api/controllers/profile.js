@@ -16,7 +16,11 @@ module.exports = function (context) {
         authGuard,
         async function (req, res) {
             const exchanges = await context.get('users').getExchanges(req.user.id);
-            await context.get('exchanges').getBalanceFromExchanges(exchanges);
+            const balances = await context.get('exchanges').getBalanceFromExchanges(exchanges);
+            for (let i = 0; i < exchanges.length; i++) {
+                exchanges[i].assets = balances[i];
+            }
+            await context.get('users').updateExchanges(req.user.id, exchanges);
             res.json({success: true});
         }
     );

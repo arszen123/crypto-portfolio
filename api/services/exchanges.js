@@ -18,6 +18,7 @@ class ExchangesService {
                 res.push({
                     key,
                     requiredCredentials,
+                    name: exchangeInstance.name,
                     logo: exchangeInstance.urls.logo,
                     site: exchangeInstance.urls.www,
                 });

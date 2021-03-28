@@ -6,6 +6,7 @@ const port = 8080;
 const auth = require('./controllers/auth');
 const exchanges = require('./controllers/exchanges');
 const profile = require('./controllers/profile');
+const prices = require('./controllers/prices');
 const UsersService = require('./services/users');
 const DatabaseService = require('./services/database');
 const JwtService = require('./services/jwt');
@@ -68,6 +69,7 @@ app.use(async (req, res, next) => {
 app.use('/auth', auth(context));
 app.use('/exchanges', exchanges(context));
 app.use('/profile', profile(context));
+app.use('/prices', prices(context));
 
 app.use(async (req, res, next) => {
     await context.get('db').close();

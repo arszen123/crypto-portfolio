@@ -1,0 +1,19 @@
+<div class="container">
+    <div id="chart">
+        <app-chart></app-chart>
+    </div>
+    <div id="exchanges">
+        <app-exchanges></app-exchanges>
+    </div>
+    <div id="assets">
+        <app-assets></app-assets>
+    </div>
+    <div class="bottom-right stack">
+    <button id="sync-balances" mat-fab color="primary" (click)="syncBalances()">
+        <mat-icon>sync</mat-icon>
+    </button>
+    <button id="create-exchange" mat-fab color="primary" (click)="createExchange()">
+        <mat-icon>add</mat-icon>
+    </button>
+    </div>
+</div>

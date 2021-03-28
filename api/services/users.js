@@ -37,6 +37,9 @@ class UsersService {
     async getExchanges(userId) {
         return (await (this.collection.findOne({_id: ObjectId(userId)}, {exchanges: 1}))).exchanges || [];
     }
+    updateExchanges(userId, exchanges) {
+        return this.collection.updateOne({_id: ObjectId(userId)}, {$set: {exchanges}});
+    }
 }
 
 module.exports = UsersService;

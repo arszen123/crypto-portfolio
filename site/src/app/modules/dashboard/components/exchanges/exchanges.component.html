@@ -1,0 +1,12 @@
+<mat-list>
+    <ng-container *ngFor="let exchange of $exchenges|async; let last = last">
+        <mat-list-item>
+            {{ exchange.key }}
+            <div class="spacer"></div>
+            <button mat-mini-fab color="primary" (click)="editExchange(exchange)">
+                <mat-icon>edit</mat-icon>
+            </button>
+        </mat-list-item>
+        <mat-divider *ngIf="!last"></mat-divider>
+    </ng-container>
+</mat-list>
