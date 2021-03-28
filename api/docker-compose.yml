@@ -1,0 +1,29 @@
+version: '3.0'
+
+services: 
+  api:
+    image: node
+    working_dir: /app
+    volumes:
+      - ./:/app
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+    environment:
+      DB_URI: mongodb://database:27017
+      DB_AUTH_USER: root
+      DB_AUTH_PASS: example
+      PASSWORD_SALT: 17f4c742e74a2abc9458fd4becbd9586
+      JWT_SECRET: 010c52a285eb94fd7901bef841a204dc
+      JWT_EXPIRES_IN: 8h
+    depends_on: 
+      - database
+    command: "npm run start:dev"
+
+  database:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
