@@ -3,11 +3,13 @@
     <mat-form-field>
         <mat-label>Exchange</mat-label>
         <mat-select formControlName="key" (selectionChange)="selectExchange(key.value)" #key>
-            <mat-option *ngFor="let exchange of $availableExchanges | async" [value]="exchange.key">{{exchange.name}}
+            <mat-option *ngFor="let exchange of availableExchanges$ | async" [value]="exchange.key">
+                <img [src]="exchange.logo">
+                {{exchange.name}}
             </mat-option>
         </mat-select>
     </mat-form-field>
-    <ng-container *ngIf="selectedExchangeCredentials">
+    <ng-container *ngIf="isExchangeSelected">
         <mat-form-field *ngFor="let credential of selectedExchangeCredentials">
             <mat-label>{{credential}}</mat-label>
             <input matInput type="text" [placeholder]="credential" [formControlName]="credential">
@@ -15,6 +17,6 @@
     </ng-container>
 </form>
 <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="{saved: false}">Cancel</button>
     <button mat-button (click)="saveExchange()">Save</button>
 </mat-dialog-actions>

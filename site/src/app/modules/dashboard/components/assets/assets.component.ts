@@ -8,14 +8,14 @@ import { ExchangesService } from '../../services/exchanges.service';
 })
 export class AssetsComponent implements OnInit {
 
-  public $assets;
+  public assets$;
 
   constructor(
     private exchangesService: ExchangesService
   ) { }
 
   ngOnInit(): void {
-    this.$assets = this.exchangesService.getAssets();
+    this.assets$ = this.exchangesService.getAssets();
   }
 
 }

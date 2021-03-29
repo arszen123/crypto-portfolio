@@ -35,6 +35,8 @@ export class ChartComponent implements OnInit {
   ngOnInit(): void {
     const _getNextColor = (() => { let i = 0; return () => ['green', 'orange', 'cyan', 'red', 'blue'][i++ % 5] })();
     this.exchangesService.getAssets().subscribe((assets: any) => {
+      this.labels = [];
+      this.data = [];
       for (const asset of assets) {
         this.labels.push(asset.key);
         this.data.push(asset.value * asset.price);

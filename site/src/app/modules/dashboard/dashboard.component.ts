@@ -24,8 +24,8 @@ export class DashboardComponent implements OnInit {
     const dialogRef = this.dialog.open(EditExchangeComponent, {
       width: '25%',
     });
-    dialogRef.afterClosed().subscribe(({ saved }) => {
-      if (saved) {
+    dialogRef.afterClosed().subscribe(res => {
+      if (res && res.saved) {
         this._snackBar.open('Exchange saved!', 'Cool', {
           duration: 2000,
         })

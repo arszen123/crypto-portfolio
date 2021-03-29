@@ -25,13 +25,13 @@ class UsersService {
     updateExchange(userId, exchangeId, updateExchangeDto) {
         const objectExchangeId = ObjectId(exchangeId);
         return this.collection.updateOne(
-            {_id: ObjectId(userId), 'exchanges._id': objectExchangeId},
-            {$set: {'exchanges.$': {...updateExchangeDto, _id: objectExchangeId}}}
+            {_id: ObjectId(userId), 'exchanges.id': objectExchangeId},
+            {$set: {'exchanges.$': {...updateExchangeDto, id: objectExchangeId}}}
         );
     }
 
     deleteExchange(userId, exchangeId) {
-       return this.collection.updateOne({_id: ObjectId(userId)}, {$pull: {exchanges: {_id: ObjectId(exchangeId)}}});
+       return this.collection.updateOne({_id: ObjectId(userId)}, {$pull: {exchanges: {id: ObjectId(exchangeId)}}});
     }
 
     async getExchanges(userId) {
