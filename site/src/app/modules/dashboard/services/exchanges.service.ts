@@ -1,15 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { forkJoin, Observable, ReplaySubject } from 'rxjs';
-import { map, mergeMap, shareReplay } from 'rxjs/operators';
+import { map, mergeMap, shareReplay, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { CurrencyConverterService } from './currency-converter.service';
 
 type Exchange = { id: string, key: string, assets: { [key: string]: string } }
 type ExchangesResponse = [Exchange];
 type AvailableExchange = { key: string, name: string, www: string, logo: string, requiredCredentials: string[] }
-type Asset = {key: string, value: number, price: number};
-type GeneralResponse = {success: boolean};
+type Asset = { key: string, value: number, price: number };
+type GeneralResponse = { success: boolean, message?: string };
 
 @Injectable({
   providedIn: 'root'
@@ -60,26 +60,23 @@ export class ExchangesService {
   }
 
   createExchange(exchangeData) {
-    return this.http.post<GeneralResponse>(environment.api + '/profile/exchanges', exchangeData).pipe(map(v => {
+    return this.http.post<GeneralResponse>(environment.api + '/profile/exchanges', exchangeData).pipe(tap(() => {
       this.syncBalances().subscribe();
       this._updateExchanges();
-      return v;
     }));
   }
 
   updateExchange(exchangeId, exchangeData) {
-    return this.http.put<GeneralResponse>(environment.api + `/profile/exchanges/${exchangeId}`, exchangeData).pipe(map(v => {
+    return this.http.put<GeneralResponse>(environment.api + `/profile/exchanges/${exchangeId}`, exchangeData).pipe(tap(() => {
       this.syncBalances().subscribe();
       this._updateExchanges();
-      return v;
     }));
   }
 
   deleteExchange(exchangeId) {
-    return this.http.delete<GeneralResponse>(environment.api + `/profile/exchanges/${exchangeId}`).pipe(map(v => {
+    return this.http.delete<GeneralResponse>(environment.api + `/profile/exchanges/${exchangeId}`).pipe(tap(() => {
       this.syncBalances().subscribe();
       this._updateExchanges();
-      return v;
     }));
   }
 
@@ -87,9 +84,8 @@ export class ExchangesService {
    * Synchronize user assets balances, and refressh assets.
    */
   syncBalances() {
-    return this.http.get<GeneralResponse>(environment.api + '/profile/exchanges/sync-balances').pipe(map(v => {
+    return this.http.get<GeneralResponse>(environment.api + '/profile/exchanges/sync-balances').pipe(tap(() => {
       this._updateAssets();
-      return v;
     }));
   }
 

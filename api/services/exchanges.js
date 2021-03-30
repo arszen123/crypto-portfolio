@@ -59,6 +59,20 @@ class ExchangesService {
             throw new Error('Exchange not found!');
         }
     }
+    /**
+     * Tests whether the credentials valid and has the required roles or not.
+     */
+    async testCredentials(exchange) {
+        const {key, ...credentials} = exchange;
+        try {
+            this._assertExchangeAvailable(key);
+            const exchange = new cctx[key](credentials);
+            exchange.checkRequiredCredentials();
+            (await exchange.fetchBalance())
+        } catch (e) {
+            throw Error('Invalid credentials! Please check if it is valid and has the right roles.');
+        }
+    }
 }
 
 module.exports = ExchangesService;

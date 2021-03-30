@@ -40,13 +40,16 @@ module.exports = function (context) {
         async function (req, res) {
             const createExchangeDto = req.body || {};
             const result = { success: true };
+            if (!(await _testCredentials(res, createExchangeDto))) {
+                return;
+            }
             try {
                 const insertedId = await context.get('users').addExchange(req.user.id, createExchangeDto);
                 result.id = insertedId;
             } catch (e) {
                 res.json({
                     success: false,
-                    error: 'Error',
+                    message: 'Error',
                 });
                 return;
             }
@@ -59,12 +62,15 @@ module.exports = function (context) {
         authGuard,
         async function (req, res) {
             const createExchangeDto = req.body || {};
+            if (!(await _testCredentials(res, createExchangeDto))) {
+                return;
+            }
             try {
                 await context.get('users').updateExchange(req.user.id, req.params.id, createExchangeDto);
             } catch (e) {
                 res.json({
                     success: false,
-                    error: 'Error',
+                    message: 'Error',
                 });
                 return;
             }
@@ -82,7 +88,7 @@ module.exports = function (context) {
             } catch (e) {
                 res.json({
                     success: false,
-                    error: 'Error',
+                    message: 'Error',
                 });
                 return;
             }
@@ -91,5 +97,18 @@ module.exports = function (context) {
             })
         }
     )
+
+    async function _testCredentials(res, exchange) {
+        try {
+            await context.get('exchanges').testCredentials(exchange);
+        } catch (e) {
+            res.json({
+                success: false,
+                message: e.message,
+            });
+            return false;
+        }
+        return true;
+    }
     return router;
 }

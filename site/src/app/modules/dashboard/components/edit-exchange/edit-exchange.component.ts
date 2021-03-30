@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { map } from 'rxjs/operators';
 import { ExchangesService } from '../../services/exchanges.service';
 
@@ -44,6 +45,7 @@ export class EditExchangeComponent implements OnInit {
   constructor(
     private exchangesService: ExchangesService,
     private dialogRef: MatDialogRef<EditExchangeComponent>,
+    private _snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) private data: ExchangeData,
   ) { }
 
@@ -69,8 +71,15 @@ export class EditExchangeComponent implements OnInit {
 
   saveExchange() {
     if (this.form.valid) {
-      this._saveOrUpdate(this.form.value).subscribe(res => {
-        this.dialogRef.close({saved: true});
+      this._saveOrUpdate(this.form.value)
+      .subscribe(res => {
+        if (res.success) {
+          this.dialogRef.close({saved: true});
+          return;
+        }
+        this._snackBar.open(res.message, 'Ok', {
+          duration: 5000,
+        });
       })
     }
   }

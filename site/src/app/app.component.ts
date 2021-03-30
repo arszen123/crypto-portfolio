@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
+import { AuthService } from './modules/auth/auth.module';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -11,14 +8,16 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'site';
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
-    .pipe(
-      map(result => result.matches),
-      shareReplay()
-    );
+  get isAuthenticated() {
+    return this.authService.isAuthenticated();
+  }
 
-  constructor(private breakpointObserver: BreakpointObserver, private http: HttpClient) {
+  constructor(private authService: AuthService, private router: Router) {
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/auth']);
   }
 }

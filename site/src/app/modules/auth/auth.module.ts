@@ -9,6 +9,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './http-interceptors/auth.interceptor';
 import { AuthGuard } from './guards/auth.guard';
 import { GuestGuard } from './guards/guest.guard';
+import { AuthService } from './services/auth.service';
 
 const providers = [
   {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
@@ -30,4 +31,4 @@ const providers = [
 })
 export class AuthModule { }
 
-export {AuthGuard, GuestGuard, providers};
+export {AuthGuard, GuestGuard, AuthService, providers};

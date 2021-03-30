@@ -1,7 +1,11 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav-content>
     <mat-toolbar color="primary">
-      <span>site</span>
+      <span>Crypto Portfolio</span>
+      <div class="spacer"></div>
+      <button mat-icon-button *ngIf="isAuthenticated" (click)="logout()">
+        <mat-icon>logout</mat-icon>
+      </button>
     </mat-toolbar>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
