@@ -23,6 +23,10 @@
     "assets assets";
     row-gap: 10px;
     column-gap: 10px;
+    @media only screen and (max-width: 768px) {
+        grid-template-columns: 100%;
+        grid-template-areas: "chart" "assets" "exchanges";
+    }
 }
 
 #chart {

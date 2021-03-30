@@ -1,17 +1,20 @@
-<table mat-table [dataSource]="assets$|async" class="mat-elevation-z8">
+<div class="mat-elevation-z8">
+  <table mat-table matSort [dataSource]="dataSource" class="mat-elevation-z8">
   <ng-container matColumnDef="symbol">
     <th mat-header-cell *matHeaderCellDef>Symbol</th>
     <td mat-cell *matCellDef="let element"> {{element.key}} </td>
   </ng-container>
   <ng-container matColumnDef="value">
-    <th mat-header-cell *matHeaderCellDef>Value</th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Value</th>
     <td mat-cell *matCellDef="let element"> {{element.value}} </td>
   </ng-container>
-  <ng-container matColumnDef="price">
-    <th mat-header-cell *matHeaderCellDef>price</th>
-    <td mat-cell *matCellDef="let element"> {{element.value * element.price | currency }} </td>
+  <ng-container matColumnDef="valuePrice">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>price</th>
+    <td mat-cell *matCellDef="let element"> {{element.valuePrice | currency }} </td>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="['symbol', 'value', 'price']"></tr>
-  <tr mat-row *matRowDef="let row; columns: ['symbol', 'value', 'price'];"></tr>
+  <tr mat-header-row *matHeaderRowDef="['symbol', 'value', 'valuePrice']"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['symbol', 'value', 'valuePrice'];"></tr>
 </table>
+<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</div>

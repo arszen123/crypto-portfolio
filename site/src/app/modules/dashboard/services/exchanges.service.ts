@@ -121,7 +121,7 @@ export class ExchangesService {
     const res = [];
     for (const symbol in assets) {
       const assetWithPrice = this.currencyConverterService.converToUsd(symbol).pipe(map(symbolPrice => {
-        return { key: symbol, value: assets[symbol], price: symbolPrice }
+        return { key: symbol, value: assets[symbol], price: symbolPrice, valuePrice: assets[symbol]*symbolPrice }
       }));
       res.push(assetWithPrice);
     }

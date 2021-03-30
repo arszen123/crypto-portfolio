@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ExchangesService } from '../../services/exchanges.service';
 import { ChartType, ChartOptions } from 'chart.js';
+import { Observable } from 'rxjs';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { map, shareReplay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chart',
@@ -12,7 +15,6 @@ export class ChartComponent implements OnInit {
   public chartType: ChartType = 'doughnut';
   public data = [];
   public labels = [];
-  public chartLegend = true;
   public chartColors = [
     {
       backgroundColor: [],
@@ -28,8 +30,16 @@ export class ChartComponent implements OnInit {
     }
   };
 
+
+  public chartLegend$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
+    .pipe(
+      map(result => !result.matches),
+      shareReplay()
+    );
+
   constructor(
     private exchangesService: ExchangesService,
+    private breakpointObserver: BreakpointObserver,
   ) { }
 
   ngOnInit(): void {
