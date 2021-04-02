@@ -12,3 +12,9 @@ docker-compose up
 npm install
 ng serve
 ```
+
+## Tested exchanges:
+
+- Binance
+- Kraken
+- Coinbase PRO
