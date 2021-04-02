@@ -32,7 +32,9 @@ export class SignUpComponent implements OnInit {
         if (res.success) {
           this._snackBar.open('You just created your profile! 👍', 'Cool', {duration: 2000});
           this.router.navigate(['/']);
+          return;
         }
+        this._snackBar.open('Username already taken.', 'Ok', {duration: 2000});
       });
     }
   }

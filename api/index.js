@@ -12,6 +12,7 @@ const DatabaseService = require('./services/database');
 const JwtService = require('./services/jwt');
 const PasswordManagerService = require('./services/password-manager');
 const ExchangesService = require('./services/exchanges');
+const CryptoService = require('./services/crypto');
 const { ServiceContext } = require('./utils/context');
 const bodyParser = require('body-parser');
 const passport = require('passport');
@@ -38,6 +39,7 @@ const context = new ServiceContext({
         return new UsersService(this.get('db'), this.get('password-manager'))
     },
     exchanges: () => new ExchangesService(),
+    crypto: () => new CryptoService(Buffer.from(process.env.API_CREDENTIALS_SALT, 'hex'), Buffer.from(process.env.API_CREDENTIALS_IV, 'hex')),
 });
 
 /**
@@ -78,8 +80,10 @@ app.use(async (req, res, next) => {
 
 app.listen(port, () => {
     // setup
-    context.get('db').executeTransaction( db => {
-        db.collection('users').createIndex({username: 1}, {unique: true})
-    });
+    if (process.env.ENVIRONMENT === 'development') {
+        context.get('db').executeTransaction( db => {
+            db.collection('users').createIndex({username: 1}, {unique: true})
+        });
+    }
     console.log(`Application listening at http://localhost:${port}.`);
 });

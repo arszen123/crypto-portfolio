@@ -1,10 +1,13 @@
-<div class="chart">
-    <canvas baseChart
-    [data]="data"
-    [labels]="labels"
-    [chartType]="chartType"
-    [options]="chartOptions"
-    [colors]="chartColors"
-    [legend]="chartLegend$ | async">
-    </canvas>
+<div style="text-align: center;">
+    <h2>{{ dataSum | currency }}</h2>
+    <div class="chart">
+        <canvas baseChart
+        [data]="data"
+        [labels]="labels"
+        [chartType]="chartType"
+        [options]="chartOptions"
+        [colors]="chartColors"
+        [legend]="chartLegend$ | async">
+        </canvas>
+    </div>
 </div>

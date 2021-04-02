@@ -30,6 +30,8 @@ export class ChartComponent implements OnInit {
     }
   };
 
+  public dataSum: number = 0;
+
 
   public chartLegend$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -52,6 +54,7 @@ export class ChartComponent implements OnInit {
         this.data.push(asset.value * asset.price);
         this.chartColors[0].backgroundColor.push('dark' + _getNextColor());
       }
+      this.dataSum = this.data.reduce((a,c) => a+c, 0);
     })
   }
 

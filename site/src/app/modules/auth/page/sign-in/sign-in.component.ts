@@ -29,7 +29,9 @@ export class SignInComponent implements OnInit {
         if (res.success) {
           this._snackBar.open('Success, redirecting...👉', 'Cool', { duration: 2000 });
           this.router.navigate(['/']);
+          return;
         }
+        this._snackBar.open('Wrong username or password.', 'Ok', {duration: 2000});
       });
     }
   }

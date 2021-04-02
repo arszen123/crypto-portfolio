@@ -9,12 +9,7 @@ class ExchangesService {
         for (const key of exchangesKey) {
             const exchangeInstance = new cctx[key]();
             if (exchangeInstance.has['fetchBalance']) {
-                const requiredCredentials = [];
-                for (const credentialKey in exchangeInstance.requiredCredentials) {
-                    if (exchangeInstance.requiredCredentials[credentialKey]) {
-                        requiredCredentials.push(credentialKey);
-                    }
-                }
+                const requiredCredentials = this._getExchangeCredentialsByExchange(exchangeInstance);
                 res.push({
                     key,
                     requiredCredentials,
@@ -46,9 +41,11 @@ class ExchangesService {
         exchange.checkRequiredCredentials();
         const balances = (await exchange.fetchBalance()).total;
         const result = {};
-        for (const key in balances) {
-            if (balances[key] > 0) {
-                result[key] = balances[key];
+        for (const assetKey in balances) {
+            const balance = balances[assetKey];
+            if (balance > 0) {
+                const normalizedKey = this._normalizeAssetKey(key, assetKey);
+                result[normalizedKey] = balance;
             }
         }
         return result;
@@ -72,6 +69,42 @@ class ExchangesService {
         } catch (e) {
             throw Error('Invalid credentials! Please check if it is valid and has the right roles.');
         }
+    }
+
+    getExchangeCredentialsByKey(key) {
+        this._assertExchangeAvailable(key);
+        const exchange = new cctx[key]();
+        return this._getExchangeCredentialsByExchange(exchange);
+    }
+    
+    _getExchangeCredentialsByExchange(exchange) {
+        const res = [];
+        for (const credentialKey in exchange.requiredCredentials) {
+            if (exchange.requiredCredentials[credentialKey]) {
+                res.push(credentialKey);
+            }
+        }
+        return res;
+    }
+
+    /**
+     * On different exchanges you can stake/provide liquidity,
+     * and these tokens got different prefixes/postfixes.
+     * 
+     * @param {string} exchangeKey
+     * @param {string} assetKey
+     */
+    _normalizeAssetKey(exchangeKey, assetKey) {
+        if (exchangeKey === 'kraken') {
+            return assetKey.split('.')[0];
+        }
+        if (exchangeKey === 'binance') {
+            if (assetKey.slice(0,2) === 'LD' && assetKey.length > 2) {
+                return assetKey.slice(2);
+            }
+            return assetKey;
+        }
+        return assetKey;
     }
 }
 

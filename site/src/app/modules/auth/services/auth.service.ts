@@ -16,17 +16,11 @@ export class AuthService {
   }
 
   createProfile(credentials: Credentials) {
-    return this.http.post(environment.api + '/auth/sign-up', credentials).pipe(map(({success, token}: AuthRespose) => {
-      this.setToken(token);
-      return {success};
-    }));
+    return this.http.post(environment.api + '/auth/sign-up', credentials).pipe(map(this._setTokenPipe));
   }
 
   authenticate(credentials: Credentials) {
-    return this.http.post(environment.api + '/auth/sign-in', credentials).pipe(map(({success, token}: AuthRespose) => {
-      this.setToken(token);
-      return {success};
-    }));
+    return this.http.post(environment.api + '/auth/sign-in', credentials).pipe(map(this._setTokenPipe));
   }
 
   private setToken(token: string) {
@@ -43,5 +37,12 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('token');
+  }
+
+  private _setTokenPipe({success, token}: AuthRespose) {
+    if (success) {
+      this.setToken(token);
+    }
+    return {success};
   }
 }

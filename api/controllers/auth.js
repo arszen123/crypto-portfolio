@@ -2,7 +2,6 @@
 
 const router = require('express').Router();
 const ajv = new (require("ajv").default)();
-const passport = require('passport');
 
 const CreateUserDTOSchema = {
     type: "object",
@@ -36,7 +35,8 @@ module.exports = function (context) {
         }
         const user = await context.get('users').findByUsername(signInData.username);
         if (user && context.get('password-manager').validate(signInData.password, user.password)) {
-            const token = context.get('jwt').sign({id: user._id.toString(), username: user.username});
+            const apiEncodingKey = context.get('crypto').generateKey(user.password);
+            const token = context.get('jwt').sign({id: user._id.toString(), username: user.username, apiEncodingKey});
             res.json({
                 success: true,
                 token,
@@ -64,7 +64,8 @@ module.exports = function (context) {
         }
         try {
             const user = await context.get('users').create(createUserDto);
-            response.token = context.get('jwt').sign({id: user.insertedId, username: createUserDto.username});
+            const apiEncodingKey = context.get('crypto').generateKey(createUserDto.password);
+            response.token = context.get('jwt').sign({id: user.insertedId, username: createUserDto.username, apiEncodingKey});
         } catch (e) {
             response.success = false;
             response.message = 'Error';

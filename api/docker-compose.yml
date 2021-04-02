@@ -15,8 +15,11 @@ services:
       DB_AUTH_USER: root
       DB_AUTH_PASS: example
       PASSWORD_SALT: 17f4c742e74a2abc9458fd4becbd9586
+      API_CREDENTIALS_SALT: a7a1f0bf186b7db7ac96a591760429d6
+      API_CREDENTIALS_IV: af4a2591fe7f4ec189da0e969b1452d1
       JWT_SECRET: 010c52a285eb94fd7901bef841a204dc
       JWT_EXPIRES_IN: 8h
+      ENVIRONMENT: 'development' # 'production'
     depends_on: 
       - database
     command: "npm run start:dev"
